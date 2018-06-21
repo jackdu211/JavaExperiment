@@ -1,100 +1,48 @@
+
 import java.util.Calendar;
 import java.util.Scanner;
-
 public class Calender {
-
-        public static void main(String[] args) {
-          
-            Scanner sc=new Scanner(System.in);
-            System.out.print("请输入年份:  ");
-            int year = sc.nextInt();
-            System.out.print("请输入月份:  ");
-            int month = sc.nextInt();
-          
-            printCalender(year,month - 1);
-            printCalender(year,month);
-            printCalender(year,month + 1);
-
-
+    static public void main(String args[]){
+        Calendar c = Calendar.getInstance();
+        Scanner sc = new Scanner(System.in);
+        String[][] calendar = new String[60][21];
+        int flag = 0;
+        int month = 0;
+        System.out.print("请输入年份：");
+        int year=sc.nextInt();
+        c.set(Calendar.YEAR, year);
+        c.set(Calendar.MONTH, Calendar.JANUARY);
+        c.set(Calendar.DAY_OF_MONTH, 1);
+        while(c.get(Calendar.YEAR)==year){
+            int wday=c.get(Calendar.DAY_OF_WEEK);
+            int mday=c.get(Calendar.DAY_OF_MONTH);
+            int M = c.get(Calendar.MONTH) % 3;
+            if(mday==1){
+                flag =  c.get(Calendar.MONTH) / 3 * 5 ;
+                for(int i=0;i<wday-1;i++) calendar[flag][M * 7 + i] = " \t";
             }
 
-        
-
-
-        public static void printCalender(int year, int m){
-
-            Calendar calendar = Calendar.getInstance();
-            int count = 1;
-            int days;
-            int month=m - 1;
-            if (month < 0) {
-                month = 11;
-                year -= 1;
-                
-            }
-
-            if (month > 11) {
-                month = 0;
-                year += 1;
-                
-            }
-            calendar.set(Calendar.YEAR, year);
-            calendar.set(Calendar.MONTH, month);
-            calendar.set(Calendar.DATE, 0);
-            if (((year%4==0&&year%100!=0)||(year%400==0))&&m==2) {
-                days=29;
-            }else{
-                days = chooseMonth(month + 1);}
-            System.out.println("\n"+year + "年" + (month + 1) + "月的日历：\n");
-            System.out.println("星期日\t星期一\t星期二\t星期三\t星期四\t星期五\t星期六");
-            while (count <=days) {
-                calendar.add(Calendar.DAY_OF_MONTH, 1);
-                int day = calendar.getTime().getDay();  
-                if (count ==1) {
-                    for (int i = 0; i < day; i++) {
-                        System.out.print("\t");
-                    }
-                }
-                if (day == 0) {
-                    System.out.println();    
-                }
-                System.out.print(calendar.getTime().getDate() + "\t");  
-                count++;
-
-            }
-
-            System.out.println(""); 
-
-         }
-
-
-
-        public static int chooseMonth(int m) {
-            int days = 0;
-            switch (m) {
-                case 2:
-                    days = 28;
-                    break;
-
-                case 1:
-                case 3:
-                case 5:
-                case 7:
-                case 8:
-                case 10:
-                case 12:
-                    days = 31;
-                    break;
-
-                case 4:
-                case 6:
-                case 9:
-                case 11:
-                    days = 30;
-                    break;
-                default:
-                    days = 0;
-            }
-            return days;
+            calendar[flag][M * 7 + wday - 1] = mday+"\t";
+            if(wday==7) flag++;
+            c.add(Calendar.DAY_OF_YEAR, 1);
         }
-}
+
+
+        for (int i = 0;i < 20 ;i ++ ) {
+            if(i % 5 == 0){
+                System.out.println("\n\n\t\t " + (i / 5 * 3 + 1) + "月" + "\t\t\t\t\t\t\t\t  "+ (i / 5  * 3 + 2) + "月" + "\t\t\t\t\t\t\t  "+ (i / 5 * 3+ 3) + "月" + "\t\t\t\t");
+                System.out.println("\n日\t一\t二\t三\t四\t五\t六\t\t日\t一\t二\t三\t四\t五\t六\t\t日\t一\t二\t三\t四\t五\t六\t");
+            }
+            for (int j = 0;j < 21 ;j++ ) {
+                if(j % 7 == 0 && j != 0)
+                    System.out.print("\t");
+                if(calendar[i][j] != null)
+                    System.out.print(calendar[i][j]);
+                else
+                    System.out.print(" \t");
+            }
+            System.out.println();
+        }
+
+    }
+} 
